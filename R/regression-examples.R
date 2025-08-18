@@ -95,8 +95,7 @@ tbl_regression(
   exponentiate = TRUE,
   label = list(
     sex_cat ~ "Sex",
-    eyesight_cat ~ "Eyesight",
-    income ~ "Income"
+    eyesight_cat ~ "Eyesight"
   )
 )
 
