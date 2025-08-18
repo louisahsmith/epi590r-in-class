@@ -78,3 +78,58 @@ tbl_summary(
   modify_header(label = "**Variable**", p.value = "**P**")
 
 
+tbl_summary(
+  nlsy,
+  by = sex_cat,
+  include = c(
+    sex_cat, race_eth_cat,
+    eyesight_cat, glasses, age_bir
+  ),
+  label = list(
+    race_eth_cat ~ "Race/ethnicity",
+    eyesight_cat ~ "Eyesight",
+    glasses ~ "Wears glasses",
+    age_bir ~ "Age at first birth"
+  ),
+  missing_text = "Missing"
+) |>
+  # change the test used to compare sex_cat groups
+  add_p(test = list(
+    all_continuous() ~ "t.test",
+    all_categorical() ~ "chisq.test"
+  ))
+
+
+#Make a tbl_summary(). Include categorical region, race/ethnicity, income, and the sleep variables (use a helper function to select those) and make sure they are nicely labeled.
+
+# exercise 3
+tbl_summary(
+  nlsy,
+  include = c(
+    starts_with("sleep"),
+    race_eth_cat, region_cat, income
+  ),
+  label = list(
+    race_eth_cat ~ "Race/ethnicity",
+    region_cat ~ "Region",
+    income ~ "Income",
+    sleep_wkdy ~ "Sleep on weekdays",
+    sleep_wknd ~ "Sleep on weekends"
+  )
+)
+
+# exercise 4
+tbl_summary(
+  nlsy,
+  include = c(
+    starts_with("sleep"),
+    race_eth_cat, region_cat, income
+  ),
+  label = list(
+    race_eth_cat ~ "Race/ethnicity",
+    region_cat ~ "Region",
+    income ~ "Income",
+    sleep_wkdy ~ "Sleep on weekdays",
+    sleep_wknd ~ "Sleep on weekends"
+  )
+)
