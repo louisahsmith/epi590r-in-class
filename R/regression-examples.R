@@ -70,7 +70,7 @@ linear_model_int <- lm(income ~ sex_cat * age_bir + race_eth_cat,
 )
 
 # logistic model
-logistic_model <- glm(glasses ~ eyesight_cat + sex_cat + income,
+logistic_model <- glm(glasses ~ eyesight_cat + sex_cat,
   data = nlsy, family = binomial()
 )
 
@@ -133,68 +133,3 @@ tbl_merge(list(tbl_no_int, tbl_int),
 )
 
 
-#### Exercises ####
-
-# 3
-# now we are using the tbl_uvregression function to fit the models
-# for a single predictor (x) variable and varying the y variable
-tbl_uvregression(
-  nlsy,
-  x = sex_cat,
-  include = c(
-    nsibs, sleep_wkdy,
-    sleep_wknd, income
-  ),
-  method = lm
-)
-
-# 4
-# again we have to create the model first as its own object
-poisson_model <- glm(nsibs ~ eyesight_cat + sex_cat + income,
-  data = nlsy, family = poisson()
-)
-
-# and then we can create the table
-tbl_regression(
-  poisson_model,
-  exponentiate = TRUE,
-  label = list(
-    sex_cat ~ "Sex",
-    eyesight_cat ~ "Eyesight",
-    income ~ "Income"
-  )
-)
-
-# 5
-# create the log-binomial model
-eyes_binomial_model <- glm(glasses ~ eyesight_cat + sex_cat,
-  data = nlsy, family = binomial(link = "log")
-)
-
-# turn it into a table
-# we'll store the table as an object so we can use it later
-eyes_binomial_table <- tbl_regression(eyes_binomial_model,
-  exponentiate = TRUE
-)
-# look at the table
-eyes_binomial_table
-
-# 6
-# create the Poisson model
-eyes_poisson_model <- glm(glasses ~ eyesight_cat + sex_cat,
-  data = nlsy, family = poisson(link = "log")
-)
-
-# turn it into a table
-eyes_poisson_table <- tbl_regression(eyes_poisson_model,
-  exponentiate = TRUE,
-  tidy_fun = partial(tidy_robust, vcov = "HC1")
-)
-# look at the table
-eyes_poisson_table
-
-# 7
-# merge the two tables to compare
-tbl_merge(list(eyes_binomial_table, eyes_poisson_table),
-  tab_spanner = c("**Binomial**", "**Poisson**")
-)
