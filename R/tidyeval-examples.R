@@ -127,53 +127,20 @@ coef(fit_income(nlsy, "age_bir"))
 coef(fit_income(nlsy, c("age_bir", "sex_cat", "race_eth_cat")))
 
 
-## When the variable is a string, use .data[[ ]] -------------------------------
-
-summarize_string <- function(data, var_name) {
-  data |>
-    summarise(
-      variable = var_name,
-      mean     = mean(.data[[var_name]], na.rm = TRUE)
-    )
-}
-
-summarize_string(nlsy, "income")
-
-# a typo gives you a clear error, which is a nice property
-summarize_string(nlsy, "incom")
-
-
-## Why strings are useful: you can loop over them ------------------------------
-
-# purrr::map() applies a function to each element; list_rbind() stacks results
-map(c("income", "age_bir", "nsibs"), \(v) summarize_string(nlsy, v)) |>
-  list_rbind()
-
-# same idea with models -- compare with the copy-and-paste version
-# in broom-examples.R
-map(
-  c("age_bir", "sex_cat", "race_eth_cat"),
-  \(p) broom::tidy(fit_income(nlsy, p), conf.int = TRUE)
-) |>
-  list_rbind()
-
-
 #### Exercises ####
 
-# 1. Write summarize_var() yourself, from scratch, using {{ }}.
+# 1. Write summarize_var_new() yourself, which returns the median, 25% percentile,
+#    and 75% percentile of a variable using {{ }}.
 #    Test it on income, age_bir, and nsibs.
 
 # 2. Add a `group` argument using .by = {{ group }}, with a default so that
 #    the function still works when you don't pass a group.
 
-# 3. Write a function that takes a dataset and a grouping variable and returns
+# 3. Write a function summarize_two_vars() that takes a dataset and two variables and
+#    returns their correlation and covariance. Use {{ }} to pass the variables. Test it
+#    on income and age_bir, and on income and nsibs.
+
+# 4. Write a function that takes a dataset and a grouping variable and returns
 #    a gtsummary table stratified by it. Add at least one formatting function
 #    (bold_labels(), add_overall(), add_p(), modify_caption(), ...).
 #    Then call it twice with different grouping variables.
-
-# 4. Confirm that the {{ }} version of the lm() function fails, and read the
-#    error. Then rewrite it with a string argument and reformulate().
-
-# 5. Switch to your FINAL PROJECT project. Write a function that does something
-#    you'd otherwise copy and paste, and use it at least twice with different
-#    variables. This satisfies the "write and use a function" objective.
