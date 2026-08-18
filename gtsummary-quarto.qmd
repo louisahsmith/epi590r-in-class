@@ -107,3 +107,34 @@ inline_text(sleep_table, variable = "sleep_wknd",
 ```
 
 In the sample the average sleep on weekends was `r inline_text(sleep_table, variable = "sleep_wknd", column = "stat_0")`.
+
+```{r}
+median_iqr <- inline_text(sleep_table, variable = "sleep_wknd",
+						column = "stat_0")
+just_median <- inline_text(sleep_table, variable = "sleep_wknd",
+						column = "stat_0", pattern = "{median}")
+median_text <- inline_text(sleep_table, variable = "sleep_wknd",
+						column = "stat_0", pattern = "{median}, IQR = [{p25}, {p75}]")
+```
+
+
+There are multiple ways we could report the median, `r median_iqr`, or we could say `r just_median`, or finally `r median_text`.
+
+```{r}
+#| label: tbl-sleep-means
+#| tbl-cap: "Descriptive statistics including sleep"
+sleep_table2 <- tbl_summary(nlsy,
+						include = c(starts_with("sleep"), sex_cat),
+						by = region_cat,
+						statistic = list(all_continuous() ~ "{mean}, sd = {sd}")) |>
+	add_overall()
+sleep_table2
+```
+
+```{r}
+inline_text(sleep_table2, variable = "sleep_wknd",
+						column = "stat_0")
+
+inline_text(sleep_table2, variable = "sleep_wknd",
+						column = "stat_0", pattern = "{mean}")
+```
