@@ -165,13 +165,28 @@ summarize_var_new(nlsy, income) # should still work
 #    returns their correlation and covariance. Use {{ }} to pass the variables. Test it
 #    on income and age_bir, and on income and nsibs.
 
+summarize_two_vars <- function(data, variable1, variable2) {
+	summarize(data,
+						covariance = cov({{ variable1 }}, {{ variable2 }}, use = "pairwise.complete.obs"),
+						correlation = cor({{ variable1 }}, {{ variable2 }}, use = "pairwise.complete.obs"))
+
+}
+summarize_two_vars(nlsy, income, age_bir)
+summarize_two_vars(nlsy, income, nsibs)
+
+
 # 4. Write a function that takes a dataset and a grouping variable and returns
 #    a gtsummary table stratified by it. Add at least one formatting function
 #    (bold_labels(), add_overall(), add_p(), modify_caption(), ...).
 #    Then call it twice with different grouping variables.
 
 table_by <- function(data, group) {
-
+	tbl_summary(data,
+							include = c(starts_with("sleep"), sex_cat),
+							by = {{ group }},
+							statistic = list(all_continuous() ~ "{mean}, sd = {sd}")) |>
+		add_overall() |>
+		bold_labels()
 }
 
 table_by(nlsy, sex_cat)
