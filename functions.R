@@ -1,3 +1,5 @@
+#### PART 1 ####
+
 new_mean <- function(x) {
 	n <- length(x)
 	mean_val <- sum(x) / n
@@ -22,7 +24,7 @@ square(53)
 53^2 # does this match?
 
 
-
+#### PART 2 ####
 
 prop <- function(x, multiplier = 1) {
 	n <- length(x)
@@ -87,3 +89,43 @@ nlsy <- read_csv(here::here("data", "raw", "nlsy.csv"),
 				 glasses_cat = factor(glasses, labels = c("No", "Yes")))
 
 new_mean(nlsy$income)
+
+#### PART 3 ####
+
+prop <- function(x, percentage = FALSE) {
+	n <- length(x)
+	mean_val <- sum(x) / n
+	if (percentage) {
+		mean_val <- mean_val * 100
+	} else {
+		# don't actually need this else statement!
+		mean_val <- mean_val
+	}
+	return(mean_val)
+}
+
+x <- c(234, 634, 234, 124, 5437, 2354345)
+
+demeaned_x <- x - mean(x)
+squared_demeaned_x <- demeaned_x^2
+sum_of_squares <- sum(squared_demeaned_x)
+n_minus_1 <- length(x) - 1
+std_dev <- sqrt(sum_of_squares / n_minus_1)
+
+sd(x)
+
+
+new_sd <- function(x) {
+	demeaned_x <- x - mean(x)
+	squared_demeaned_x <- demeaned_x^2
+	sum_of_squares <- sum(squared_demeaned_x)
+	n_minus_1 <- length(x) - 1
+	std_dev <- sqrt(sum_of_squares / n_minus_1)
+	return(std_dev)
+}
+new_sd(c(345, 123, 7564, 345, 123, 4653, 4346, 346, 76))
+sd(c(345, 123, 7564, 345, 123, 4653, 4346, 346, 76))
+
+
+new_sd(2)
+sd(2)
