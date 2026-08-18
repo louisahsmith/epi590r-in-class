@@ -79,8 +79,31 @@ There were a lot of people who slept (@tbl-sleep).
 ```{r}
 #| label: tbl-sleep
 #| tbl-cap: "Descriptive statistics including sleep"
-tbl_summary(nlsy,
+sleep_table <- tbl_summary(nlsy,
 						include = c(starts_with("sleep"), sex_cat),
 						by = region_cat) |>
 	add_overall()
+sleep_table
 ```
+
+```{r}
+median(nlsy$sleep_wknd, na.rm = TRUE)
+```
+
+```{r}
+median_sleep <- median(nlsy$sleep_wknd, na.rm = TRUE)
+```
+
+The median number of hours of sleep was `r median_sleep`
+
+```{r}
+# sleep_table$table_body
+inline_text(sleep_table, variable = "sleep_wknd",
+						column = "stat_0")
+
+# inline_text(sleep_table, variable = "sex_cat",
+# 						level = "Female",
+# 						column = "stat_0")
+```
+
+In the sample the average sleep on weekends was `r inline_text(sleep_table, variable = "sleep_wknd", column = "stat_0")`.
