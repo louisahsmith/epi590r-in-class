@@ -1,9 +1,17 @@
 ---
 title: "gtsummary in quarto"
-format: html
+format:
+  html:
+    theme: yeti
+execute:
+  echo: true
+  error: true
 ---
 
 ```{r}
+#| message: false
+#| warning: false
+
 library(tidyverse)
 library(gtsummary)
 nlsy_cols <- c("glasses", "eyesight", "sleep_wkdy", "sleep_wknd",
@@ -19,6 +27,25 @@ nlsy <- read_csv(here::here("data", "raw", "nlsy.csv"),
          glasses_cat = factor(glasses, labels = c("No", "Yes")))
 ```
 
+We’re using some data from the **National Longitudinal Survey of Youth 1979**, a cohort of American young adults aged 14-22 at enrollment in 1979. They continue to be followed to this day, and there is a wealth of publicly available data online. I’ve downloaded the answers to a survey question about whether respondents wear glasses, a scale about their eyesight with glasses, their (NLSY-assigned 😒) race/ethnicity, their sex (presumably at birth, but unclear), their family’s income in 1979, and their age at the birth of their first child.
+
+- bullet 1
+
+- bullet 2
+
+1.  here;s a number
+2.  her'es another one
+
+```{r}
+
+
+tbl_summary(
+  nlsy,
+  by = sex_cat,
+  include = c(sex_cat, race_eth_cat, region_cat,
+              eyesight_cat, glasses, age_bir))
+```
+
 # Customization of `tbl_summary()`
 
 ```{r}
@@ -30,6 +57,8 @@ tbl_summary(
 ```
 
 ```{r}
+#| label: tbl-other
+#| tbl-cap: "Other table"
 tbl_summary(
   nlsy,
   by = sex_cat,
@@ -43,4 +72,15 @@ tbl_summary(
     age_bir ~ "Age at first birth"
   ),
   missing_text = "Missing")
+```
+
+There were a lot of people who slept (@tbl-sleep).
+
+```{r}
+#| label: tbl-sleep
+#| tbl-cap: "Descriptive statistics including sleep"
+tbl_summary(nlsy,
+						include = c(starts_with("sleep"), sex_cat),
+						by = region_cat) |>
+	add_overall()
 ```
